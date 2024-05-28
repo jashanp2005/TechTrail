@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import cookieParser from "cookie-parser";
+import postRoutes from "./routes/post.route.js";
 // import dotevnv from 'dotenv';
 
 // dotenv.config();
@@ -20,8 +21,8 @@ app.listen(3000, () =>{
 // install dotenv if you want to use environment variables as well in this project
 
 app.use('/api/user', userRoutes) // will work on /api/user/test
-
 app.use('/api/auth', authRoutes)
+app.use('/api/post', postRoutes);
 
 
 // add a middleware and a function to handle errors
