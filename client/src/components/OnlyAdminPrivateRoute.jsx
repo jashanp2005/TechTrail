@@ -11,4 +11,4 @@ function OnlyAdminPrivateRoute() {
   )
 }
 
-export default OnlyAdminPrivateRoute
+export default OnlyAdminPrivateRoute;
