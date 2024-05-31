@@ -27,12 +27,12 @@ function SignUp() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success == false) {
+      if (data.success === false) {
         return setErrorMessage(data.message);
       }
       setLoading(false);
       if(res.ok) {
-        navigate('/signin');
+        navigate('/sign-in');
       }
     } catch (error) {
       console.log(error);
@@ -105,7 +105,7 @@ function SignUp() {
 
           <div className='flex gap-2 text-sm mt-5'>
             <span>Have an account?</span>
-            <Link to='/signin' className='text-blue-500'>
+            <Link to='/sign-in' className='text-blue-500'>
               Sign In
             </Link>
           </div>

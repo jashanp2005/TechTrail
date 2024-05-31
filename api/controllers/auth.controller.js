@@ -4,8 +4,9 @@ import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken'
 
 export const signup = async (req, res, next) => {
+
   const { username, email, password, isAdmin } = req.body;
-  if(!isAdmin) isAdmin = false;
+
   if (
     !username ||
     !email ||
@@ -23,7 +24,6 @@ export const signup = async (req, res, next) => {
     username,
     email,
     password: hashedPassword,
-    isAdmin
   });
 
   try {
@@ -38,6 +38,7 @@ export const signup = async (req, res, next) => {
 export const signin = async (req, res, next) => {
 
   const { email, password } = req.body;
+
   if(!email || !password || email === '' || password === ''){
     next(errorHandler(400, 'All fields are required'))
   }
@@ -74,7 +75,7 @@ export const google = async (req, res, next) => {
     const user = await User.findOne({email});
 
     if(user){
-      const token = jwt.sign({id: user._id, isAdmin: validUser.isAdmin}, "jashan");
+      const token = jwt.sign({id: user._id, isAdmin: user.isAdmin}, "jashan");
       const {password, ...rest} = user._doc;
       res.status(200).cookie('access_token', token, {
         httpOnly: true,
@@ -91,7 +92,7 @@ export const google = async (req, res, next) => {
         profilePicture: googlePhotoUrl
       });
       await newUser.save();
-      const token = jwt.sign({id: newUser._id, isAdmin: validUser.isAdmin}, "jashan");
+      const token = jwt.sign({id: newUser._id, isAdmin: newUser.isAdmin}, "jashan");
       const {password, ...rest} = newUser._doc;
       res.status(200).cookie('access_token', token, {
         httpOnly: true,

@@ -1,5 +1,4 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
-import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +14,8 @@ export default function SignIn() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    // e.target.id is a computed property that uses the id of the event target 
+    // (input field that triggered the event) as the key
   };
 
   const handleSubmit = async (e) => {
@@ -24,31 +25,26 @@ export default function SignIn() {
     }
     try {
       dispatch(signInStart());
-      const res = await axios.post('/api/auth/signin', formData, {
-          headers: { 'Content-Type': 'application/json' }
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
   
-      const data = res.data;
+      const data = await res.json();
       if (data.success === false) {
-          dispatch(signInFailure(data.message));
-      } else {
-          dispatch(signInSuccess(data));
-          navigate('/');
+        dispatch(signInFailure(data.message));
       }
-  } catch (error) {
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          dispatch(signInFailure(error.response.data.message));
-      } else if (error.request) {
-          // The request was made but no response was received
-          dispatch(signInFailure('No response received from server'));
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          dispatch(signInFailure(error.message));
+
+      if (res.ok) {
+        dispatch(signInSuccess(data));
+        navigate('/');
       }
+    } 
+    catch (error) {
+      dispatch(signInFailure(error.message));
+    };
   }
-  };
 
   return (
     <div className='min-h-screen mt-20'>
@@ -104,12 +100,14 @@ export default function SignIn() {
             </Button>
             <OAuth/>
           </form>
+
           <div className='flex gap-2 text-sm mt-5'>
             <span>Dont Have an account?</span>
             <Link to='/signup' className='text-blue-500'>
               Sign Up
             </Link>
           </div>
+          
           {errorMessage && (
             <Alert className='mt-5' color='failure'>
               {errorMessage}

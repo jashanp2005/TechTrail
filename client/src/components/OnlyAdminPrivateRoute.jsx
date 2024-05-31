@@ -7,7 +7,7 @@ function OnlyAdminPrivateRoute() {
   return currentUser && currentUser.isAdmin ? (
     <Outlet/>
   ) : (
-    <Navigate to='/signin'/>
+    <Navigate to='/sign-in'/>
   )
 }
 

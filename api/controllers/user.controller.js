@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs'
 import User from '../models/user.model.js'
-import errorHandler from '../models/user.model.js'
+import { errorHandler } from '../utils/error.js';
 
 
 export const test = (req, res) => {
@@ -22,7 +22,6 @@ export const updateUser = async (req, res, next) => {
     }
 
     if(req.body.username){
-
         if(req.body.username.length < 7 || req.body.username.length > 20){
             return next(errorHandler(400, 'Username must be between 7 and 20 characters'))
         }
@@ -56,11 +55,11 @@ export const updateUser = async (req, res, next) => {
         const {password, ...rest} = updatedUser._doc;
         res.status(200).json(rest);
     }
-
     catch(error){
         next(error);
     }
 }
+
 
 export const deleteUser = async (req, res, next) => {
     if(!req.user.isAdmin && req.user.id !== req.params.userId){
@@ -78,7 +77,7 @@ export const deleteUser = async (req, res, next) => {
 
 export const signout = (req, res, next) => {
     try{
-        res.clearcookie('access_token').status(200).json('User has been signed out');
+        res.clearCookie('access_token').status(200).json('User has been signed out');
     }
     catch(error) {
         next(error);
@@ -93,7 +92,7 @@ export const getUsers = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
-        const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+        const sortDirection = (req.query.sort === 'asc' ? 1 : -1);
 
         const users = await User.find()
                                 .sort({createdAt: sortDirection})
@@ -125,6 +124,20 @@ export const getUsers = async (req, res, next) => {
             lastMonthUsers,
         });
 
+    } 
+    catch (error) {
+        next(error);
+    }
+}
+
+export const getUser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if(!user){
+            return next(errorHandler(404, 'User not found'));
+        }
+        const {password, ...rest} = user._doc;
+        res.status(200).json();
     } 
     catch (error) {
         next(error);

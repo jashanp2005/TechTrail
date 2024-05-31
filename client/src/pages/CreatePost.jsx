@@ -6,6 +6,7 @@ import {app} from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom';
+import ReactQuill from 'react-quill';
 
 function CreatePost() {
 
@@ -31,9 +32,11 @@ function CreatePost() {
             uploadTask.on('state_changed', (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setImageUploadProgress(progress.toFixed(0));
+
             }, (error) => {
                 setImageUploadError('Image upload failed');
                 setImageUploadProgress(null);
+
             }, () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setImageUploadProgress(null);
@@ -89,7 +92,7 @@ function CreatePost() {
                 setFormData({...formData, title: e.target.value})
             }
           />
-          <Select onChange={(e) => setFormData({...formData, title: e.target.value})}>
+          <Select onChange={(e) => setFormData({...formData, category: e.target.value})}>
             <option value='uncategorized'>Select a category</option>
             <option value='javascript'>JavaScript</option>
             <option value='reactjs'>React.js</option>
@@ -125,8 +128,8 @@ function CreatePost() {
             alt='upload'
             className='w-full h-72 object-cover'
           />
-        )
-        }
+        )}
+
         <ReactQuill
           theme='snow'
           placeholder='Write something...'
@@ -134,9 +137,11 @@ function CreatePost() {
           required
           onChange={(value) => setFormData({...formData, content: value})}
         />
+
         <Button type='submit' gradientDuoTone='purpleToPink'>
           Publish
         </Button>
+
         {publishError && (
             <Alert className='mt-5' color='failure'>
             {publishError}
@@ -144,7 +149,7 @@ function CreatePost() {
         )}
       </form>
     </div>
-  )
+  );
 }
 
 export default CreatePost

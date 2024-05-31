@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
     },
 }, {timestamps: true});
 
+// the timestamps true option is used to automatically add two properties to the schema, createdAt and updatedAt
+// These properties are managed by Mongoose, and their values are automatically set when a document is created and updated.
+
 const User = mongoose.model('User', userSchema)
 
 export default User;
