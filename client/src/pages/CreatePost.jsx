@@ -1,12 +1,12 @@
-import React, {useState} from 'react'
-import { Alert, Button, FileInput, TextInput, Select } from 'flowbite-react'
+import React, {useState} from 'react';
+import { Alert, Button, FileInput, TextInput, Select } from 'flowbite-react';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import {app} from '../firebase'
+import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom';
-import ReactQuill from 'react-quill';
 
 function CreatePost() {
 
@@ -100,7 +100,11 @@ function CreatePost() {
           </Select>
         </div>
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
-          <FileInput type='file' accept='image/*' onChange={(e) => setFile(e.target.files[0])} />
+          <FileInput 
+            type='file' 
+            accept='image/*'
+            onChange={(e) => setFile(e.target.files[0])} 
+          />
           <Button
             type='button'
             gradientDuoTone='purpleToBlue'
@@ -152,4 +156,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost
+export default CreatePost;

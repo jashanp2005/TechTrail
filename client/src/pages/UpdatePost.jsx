@@ -1,20 +1,16 @@
+import React, { useState, useEffect } from 'react';
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
-import { useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-export default function UpdatePost() {
+function UpdatePost() {
+
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -23,7 +19,7 @@ export default function UpdatePost() {
   const { postId } = useParams();
 
   const navigate = useNavigate();
-    const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     try {
@@ -42,7 +38,8 @@ export default function UpdatePost() {
       };
 
       fetchPost();
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error.message);
     }
   }, [postId]);
@@ -58,17 +55,15 @@ export default function UpdatePost() {
       const fileName = new Date().getTime() + '-' + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+      uploadTask.on('state_changed', (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageUploadProgress(progress.toFixed(0));
-        },
+      },
         (error) => {
           setImageUploadError('Image upload failed');
           setImageUploadProgress(null);
-        },
+      },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUploadProgress(null);
@@ -77,12 +72,14 @@ export default function UpdatePost() {
           });
         }
       );
-    } catch (error) {
+    } 
+    catch (error) {
       setImageUploadError('Image upload failed');
       setImageUploadProgress(null);
       console.log(error);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -103,10 +100,12 @@ export default function UpdatePost() {
         setPublishError(null);
         navigate(`/post/${data.slug}`);
       }
-    } catch (error) {
+    } 
+    catch (error) {
       setPublishError('Something went wrong');
     }
   };
+  
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className='text-center text-3xl my-7 font-semibold'>Update post</h1>
@@ -191,3 +190,5 @@ export default function UpdatePost() {
     </div>
   );
 }
+
+export default UpdatePost;

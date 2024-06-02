@@ -1,12 +1,14 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import {useLocation} from 'react-router-dom'
-import DashSidebar from '../components/DashSidebar'
-import DashProfile from '../components/DashProfile'
-import DashPosts from '../components/DashPosts'
-import DashUsers from '../components/DashUsers'
+import React, { useEffect, useState } from 'react';
+import {useLocation} from 'react-router-dom';
+import DashSidebar from '../components/DashSidebar';
+import DashProfile from '../components/DashProfile';
+import DashPosts from '../components/DashPosts';
+import DashUsers from '../components/DashUsers';
+import DashComments from '../components/DashComments';
+import DashboardComp from '../components/DashboardComp';
 
 function Dashboard() {
+
   const location = useLocation();
   const [tab, setTab] = useState('');
 
@@ -14,9 +16,9 @@ function Dashboard() {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get('tab');
     if(tabFromUrl){
-      setTab(tabFromUrl)
+      setTab(tabFromUrl);
     } 
-  }, [location.search])
+  }, [location.search]);
 
   return (
     <div className='min-h-screen flex flex-col md:flex-row'>
@@ -35,8 +37,14 @@ function Dashboard() {
       {/* users */}
       {tab === 'users' && <DashUsers />}
 
+      {/* comments  */}
+      {tab === 'comments' && <DashComments />}
+
+      {/* dashboard comp */}
+      {tab === 'dash' && <DashboardComp />}
+
     </div>
   )
 }
 
-export default Dashboard
+export default Dashboard;
