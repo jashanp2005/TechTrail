@@ -41,7 +41,7 @@ function CreatePost() {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setImageUploadProgress(null);
                     setImageUploadError(null);
-                    setFormData({...formData, image: downloadURL})
+                    setFormData({...formData, image: downloadURL});
                 })
             })
         }
@@ -58,7 +58,7 @@ function CreatePost() {
             const res = await fetch('/api/post/create', {
                 method: 'POST',
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type' : 'application/json',
                 },
                 body: JSON.stringify(formData),
             })

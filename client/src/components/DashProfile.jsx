@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react'
-import { Alert, Button, TextInput, Modal, ModalBody } from 'flowbite-react'
-import {useSelector, useDispatch} from 'react-redux'
-import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
-import {app} from '../firebase'
+import { Alert, Button, TextInput, Modal } from 'flowbite-react'
+import { useSelector, useDispatch } from 'react-redux'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { updateStart, updateSuccess, updateFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from '../redux/user/userSlice';
@@ -10,6 +10,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Link } from 'react-router-dom'
 
 function DashProfile() {
+
   const {currentUser, error, loading} = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -20,6 +21,7 @@ function DashProfile() {
   const [updateUserError, setUpdateUserError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
+
   const filePickerRef = useRef();
   const dispatch = useDispatch();
 
@@ -40,6 +42,7 @@ function DashProfile() {
   const uploadImage = async () => {
     setImageFileUploading(true);
     setImageFileUploadError(null);
+
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
@@ -48,13 +51,15 @@ function DashProfile() {
     uploadTask.on('state_changed', (snapshot) => {
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       setImageFileUploadProgress(progress.toFixed(0));
-    }, (error) => {
+    }, 
+    (error) => {
       setImageFileUploadError('Failed to upload ! File must be an image of size less than 2 MB');
       setImageFileUploadProgress(null);
       setImageFile(null);
       setImageFileUrl(null);
       setImageFileUploading(false);
-    }, () => {
+    }, 
+    () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         setImageFileUrl(downloadURL);
         setFormData({ ...formData, profilePicture: downloadURL });
@@ -89,14 +94,17 @@ function DashProfile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+
       if (!res.ok) {
         dispatch(updateFailure(data.message));
         setUpdateUserError(data.message);
-      } else {
+      } 
+      else {
         dispatch(updateSuccess(data));
         setUpdateUserSuccess("User's profile updated successfully");
       }
-    } catch (error) {
+    } 
+    catch (error) {
       dispatch(updateFailure(error.message));
       setUpdateUserError(error.message);
     }
@@ -112,10 +120,12 @@ function DashProfile() {
       const data = await res.json();
       if (!res.ok) {
         dispatch(deleteUserFailure(data.message));
-      } else {
+      } 
+      else {
         dispatch(deleteUserSuccess(data));
       }
-    } catch (error) {
+    } 
+    catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
   };
@@ -128,10 +138,12 @@ function DashProfile() {
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message);
-      } else {
+      } 
+      else {
         dispatch(signoutSuccess());
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error.message);
     }
   };
@@ -139,16 +151,15 @@ function DashProfile() {
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
+
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
 
-      
       <input type='file' accept='image/*' onChange={handleImageChange} ref={filePickerRef} hidden />
 
         {/* Div for keeping the image, giving it shadow and making it rounded */}
         <div className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full'
         onClick={() => filePickerRef.current.click()}
         >
-
         {imageFileUploadProgress && (
           <CircularProgressbar value={imageFileUploadProgress || 0} 
           text={`${imageFileUploadProgress}%`} 
@@ -168,7 +179,9 @@ function DashProfile() {
           />
         )}
 
-          <img src={imageFileUrl || currentUser.profilePicture} alt='user'
+          <img 
+            src={imageFileUrl || currentUser.profilePicture} 
+            alt='user'
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
               imageFileUploadProgress && imageFileUploadProgress < 100 && 'opacity-60'
             }`}
@@ -214,17 +227,19 @@ function DashProfile() {
           {updateUserSuccess}
         </Alert>
       )}
+
       {updateUserError && (
         <Alert color='failure' className='mt-5'>
           {updateUserError}
         </Alert>
       )}
 
-{error && (
+      {error && (
         <Alert color='failure' className='mt-5'>
           {error}
         </Alert>
       )}
+
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}

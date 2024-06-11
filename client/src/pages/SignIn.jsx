@@ -14,7 +14,7 @@ function SignIn() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-    // e.target.id is a computed property that uses the id of the event target 
+    // e.target.id is a computed property that uses the id of the event target
     // (input field that triggered the event) as the key
   };
 

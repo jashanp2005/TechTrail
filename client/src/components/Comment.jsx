@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import moment from 'moment'
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import 'moment-timezone';
 import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
-import { set } from 'mongoose';
+
 
 function Comment({comment, onLike, onEdit, onDelete}) {
     const [user, setUser] = useState({});
@@ -42,17 +42,18 @@ function Comment({comment, onLike, onEdit, onDelete}) {
                 },
                 body: JSON.stringify({
                     content: editedContent
-                })
+                }),
             });
+
             if(res.ok){
                 setIsEditing(false);
                 onEdit(comment, editedContent);
             }
         } 
         catch (error) {
-            console.log(message);
+            console.log(error.message);
         }
-    }
+    };
 
   return (
 
@@ -60,14 +61,14 @@ function Comment({comment, onLike, onEdit, onDelete}) {
       <div className='flex-shrink-0 mr-3'>
         <img
           className='w-10 h-10 rounded-full bg-gray-200'
-          src={user.profilePicture}
-          alt={user.username}
+          src={user?.profilePicture || '../assets/user.jpg'}
+          alt={user?.username || 'Anonymous'}
         />
       </div>
       <div className='flex-1'>
         <div className='flex items-center mb-1'>
           <span className='font-bold mr-1 text-xs truncate'>
-            {user ? `@${user.username}` : 'anonymous user'}
+            {user && user.username ? `@${user.username}` : 'Anonymous'}
           </span>
           <span className='text-gray-500 text-xs'>{moment(comment.createdAt).fromNow()}</span>
         </div>
@@ -81,18 +82,19 @@ function Comment({comment, onLike, onEdit, onDelete}) {
           />
           <div className="flex justify-end gap-2 text-xs">
             <Button
-             type='button'
-             size='sm'
-             gradientDuoTone='purpleToBlue'
+              type='button'
+              size='sm'
+              gradientDuoTone='purpleToBlue'
               onClick={handleSave}
             >
               Save
             </Button>
+            
             <Button
-             type='button'
-             size='sm'
-             gradientDuoTone='purpleToBlue'
-             outline
+              type='button'
+              size='sm'
+              gradientDuoTone='purpleToBlue'
+              outline
               onClick={() => setIsEditing(false)}
             >
               Cancel
@@ -149,4 +151,4 @@ function Comment({comment, onLike, onEdit, onDelete}) {
   )
 }
 
-export default Comment
+export default Comment;

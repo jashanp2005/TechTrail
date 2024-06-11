@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Alert, Button, Modal, TextInput, Textarea } from 'flowbite-react'
-import { set } from 'mongoose';
+import React, { useState, useEffect } from 'react';
+import { Alert, Button, Modal, TextInput, Textarea } from 'flowbite-react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Comment from './Comment';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 function CommentSection({postId}) {
-    const {currentUser} = useSelector((state) => state.user)
+
+    const {currentUser} = useSelector((state) => state.user);
     const [comment, setComment] = useState('');
     const [commentError, setCommentError] = useState(null);
     const [comments, setComments] = useState([]);
@@ -32,7 +32,7 @@ function CommentSection({postId}) {
                 body: JSON.stringify({
                     content: comment,
                     postId,
-                    userId: currentUser._id
+                    userId: currentUser._id,
                 })
             });
             const data = await res.json();
@@ -63,14 +63,13 @@ function CommentSection({postId}) {
       getComments();
     }, [postId]);
 
+
     const handleLike = async (commentId) => {
       try {
-
         if(!currentUser){
           navigate('/sign-in');
           return;
         }
-
         const res = await fetch(`/api/comment/likeComment/${commentId}`, {
           method: 'PUT',
         });
@@ -85,11 +84,11 @@ function CommentSection({postId}) {
           }
           : comment
           ) 
-        )
+        );
         }
       } 
       catch (error) {
-        console.log(error.message)
+        console.log(error.message);
       }
     }
 
@@ -105,13 +104,13 @@ function CommentSection({postId}) {
         });
         if(res.ok){
           const data = await res.json();
-          setComments(comments.filter((comment) => comment._id !== commentId))
+          setComments(comments.filter((comment) => comment._id !== commentId));
         }
       } 
       catch (error) {
         console.log(error.message);
       }
-    }
+    };
 
     const handleEdit = async (comment, editedContent) => {
       setComments(
@@ -177,7 +176,7 @@ function CommentSection({postId}) {
       {comments.length == 0 ? (
         <p className='text-sm my-5'>No comments yet!</p>
       ) : (
-          <>
+        <>
           <div className='text-sm my-5 flex items-center gap-1'>
             <p>Comments</p>
             <div className='border border-gray-400 py-1 px-2 rounded-sm'>
@@ -185,14 +184,18 @@ function CommentSection({postId}) {
             </div>
           </div>
           {comments.map((comment) => (
-            <Comment key={comment._id} comment={comment} onLike={handleLike} 
-            onEdit={handleEdit}
-            onDelete={(commentId) => {
-              setShowModal(true);
-              setCommentToDelete(commentId);
-            }} />
+            <Comment 
+              key={comment._id} 
+              comment={comment} 
+              onLike={handleLike} 
+              onEdit={handleEdit}
+              onDelete={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              }} 
+            />
           ))}
-          </>
+        </>
       )}
 
       <Modal
@@ -222,9 +225,8 @@ function CommentSection({postId}) {
           </div>
         </Modal.Body>
       </Modal>
-
     </div>
     );
     }
 
-export default CommentSection
+export default CommentSection;

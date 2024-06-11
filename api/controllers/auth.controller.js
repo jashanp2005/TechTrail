@@ -1,11 +1,11 @@
 import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
 
-  const { username, email, password, isAdmin } = req.body;
+  const { username, email, password } = req.body;
 
   if (
     !username ||
@@ -54,7 +54,7 @@ export const signin = async (req, res, next) => {
       return next(errorHandler(400, 'Invalid password'))
     }
 
-    const token = jwt.sign({id: validUser._id, isAdmin: validUser.isAdmin}, "jashan");
+    const token = jwt.sign({id: validUser._id, isAdmin: validUser.isAdmin}, 'jashan');
     
     const {password: pass, ...rest} = validUser._doc;
 
@@ -75,7 +75,7 @@ export const google = async (req, res, next) => {
     const user = await User.findOne({email});
 
     if(user){
-      const token = jwt.sign({id: user._id, isAdmin: user.isAdmin}, "jashan");
+      const token = jwt.sign({id: user._id, isAdmin: user.isAdmin}, 'jashan');
       const {password, ...rest} = user._doc;
       res.status(200).cookie('access_token', token, {
         httpOnly: true,

@@ -25,7 +25,6 @@ export const create = async (req, res, next) => {
     }
 }
 
-
 export const getposts = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
@@ -55,7 +54,7 @@ export const getposts = async (req, res, next) => {
         const oneMonthAgo = new Date(
             now.getFullYear(),
             now.getMonth() - 1,
-            now.getData()
+            now.getDate()
         )
 
         const lastMonthPosts = await Post.countDocuments({

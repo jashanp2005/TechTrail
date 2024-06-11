@@ -86,9 +86,9 @@ export const signout = (req, res, next) => {
 
 
 export const getUsers = async (req, res, next) => {
-    if (!req.user.isAdmin) {
-        return next(errorHandler(403, 'You are not allowed to see all users'));
-    }
+    // if(!req.user.isAdmin){
+    //     return next(errorHandler(403, 'You are not an admin'));
+    // }
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
@@ -122,8 +122,7 @@ export const getUsers = async (req, res, next) => {
             users: usersWithoutPassword,
             totalUsers,
             lastMonthUsers,
-        });
-
+        }); 
     } 
     catch (error) {
         next(error);
@@ -137,7 +136,7 @@ export const getUser = async (req, res, next) => {
             return next(errorHandler(404, 'User not found'));
         }
         const {password, ...rest} = user._doc;
-        res.status(200).json();
+        res.status(200).json(rest);
     } 
     catch (error) {
         next(error);

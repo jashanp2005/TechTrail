@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.listen(3000, () =>{
-    console.log('Server is running on port 3000!!')
+    console.log('Server is running on port 3000!')
 })
 
 // install dotenv if you want to use environment variables as well in this project
@@ -35,5 +35,8 @@ app.use((err, req, res, next) => {
         success: false,
         statusCode,
         message,
-    })
-})
+    });
+});
+
+// To do -
+// check the verifyUser.js, there's something wrong in it

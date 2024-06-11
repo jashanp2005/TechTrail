@@ -19,12 +19,12 @@ function PostPage() {
         setLoading(true);
         const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
         const data = await res.json();
-        if (!res.ok) {
+        if(!res.ok) {
           setError(true);
           setLoading(false);
           return;
         }
-        if (res.ok) {
+        else {
           setPost(data.posts[0]);
           setLoading(false);
           setError(false);
@@ -54,7 +54,7 @@ function PostPage() {
     }
   }, []);
 
-  if (loading)
+  if(loading)
     return (
       <div className='flex justify-center items-center min-h-screen'>
         <Spinner size='xl' />

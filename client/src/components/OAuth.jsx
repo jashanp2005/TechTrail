@@ -9,9 +9,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 function OAuth() {
+
     const auth = getAuth(app);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const handleGoogleClick = async () => {
         const provider = GoogleAuthProvider();
         provider.setCustomParameters({prompt: 'select_account'});
@@ -36,6 +38,7 @@ function OAuth() {
             console.log(error);
         }
     }
+    
   return (
     <Button type='button' gradientDuoTone='pinkToOrange' outline onClick={handleGoogleClick}>
         <AiFillGoogleCircle className='w-6 h-6 mr-2'/>
